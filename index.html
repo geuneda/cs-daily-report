@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS ì¼ì¼ ë¦¬í¬í¸ - 2026.03.09</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Segoe UI', sans-serif; background: #f5f5f7; color: #1d1d1f; line-height: 1.6; }
+
+  /* Header */
+  .header { background: #1d1d1f; color: #fff; padding: 32px 40px; }
+  .header h1 { font-size: 24px; font-weight: 700; }
+  .header .date { color: #a1a1a6; font-size: 14px; margin-top: 4px; }
+
+  /* Tabs */
+  .tab-nav { display: flex; background: #fff; border-bottom: 1px solid #d2d2d7; padding: 0 40px; position: sticky; top: 0; z-index: 100; }
+  .tab-btn { padding: 14px 24px; font-size: 14px; font-weight: 600; border: none; background: none; cursor: pointer; color: #86868b; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .tab-btn.active { color: #0071e3; border-bottom-color: #0071e3; }
+  .tab-btn:hover { color: #1d1d1f; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Container */
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+  /* Summary Cards */
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  .summary-card { background: #fff; border-radius: 12px; padding: 20px; text-align: center; }
+  .summary-card .num { font-size: 36px; font-weight: 700; }
+  .summary-card .label { font-size: 13px; color: #86868b; margin-top: 4px; }
+  .num.red { color: #ff3b30; }
+  .num.orange { color: #ff9500; }
+  .num.blue { color: #0071e3; }
+  .num.green { color: #34c759; }
+
+  /* Alert Banner */
+  .alert-banner { background: #fff3cd; border-left: 4px solid #ff9500; padding: 16px 20px; border-radius: 8px; margin-bottom: 24px; font-size: 14px; }
+  .alert-banner strong { color: #cc7700; }
+
+  /* Key Issues */
+  .key-issues { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+  .key-issues h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+  .issue-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+  .issue-item:last-child { border-bottom: none; }
+  .issue-bullet { flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; margin-top: 7px; }
+  .issue-bullet.bug { background: #ff3b30; }
+  .issue-bullet.hack { background: #ff9500; }
+  .issue-bullet.payment { background: #0071e3; }
+  .issue-text { font-size: 14px; }
+  .issue-count { color: #86868b; font-weight: 600; }
+
+  /* CS Detail Cards */
+  .cs-card { background: #fff; border-radius: 12px; margin-bottom: 16px; overflow: hidden; border: 1px solid #e5e5ea; }
+  .cs-card-header { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .cs-card-header:hover { background: #fafafa; }
+  .cs-title-area { flex: 1; }
+  .cs-title { font-size: 15px; font-weight: 600; }
+  .cs-meta { font-size: 12px; color: #86868b; margin-top: 4px; }
+  .cs-badge { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
+  .badge-auto { background: #e8f5e9; color: #2e7d32; }
+  .badge-review { background: #fff3e0; color: #e65100; }
+  .badge-dev { background: #fce4ec; color: #c62828; }
+  .badge-done { background: #e3f2fd; color: #1565c0; }
+  .badge-skip { background: #f5f5f5; color: #9e9e9e; }
+
+  .cs-card-body { display: none; padding: 0 20px 20px; border-top: 1px solid #f0f0f0; }
+  .cs-card.open .cs-card-body { display: block; }
+
+  .cs-section { margin-top: 16px; }
+  .cs-section-label { font-size: 12px; font-weight: 700; color: #86868b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .cs-original { background: #f5f5f7; border-radius: 8px; padding: 14px; font-size: 13px; white-space: pre-wrap; }
+  .cs-draft { background: #e8f5e9; border-radius: 8px; padding: 14px; font-size: 13px; white-space: pre-wrap; border-left: 3px solid #34c759; }
+  .cs-note { background: #fff3e0; border-radius: 8px; padding: 14px; font-size: 13px; border-left: 3px solid #ff9500; }
+  .cs-info { display: flex; gap: 24px; font-size: 12px; color: #86868b; margin-top: 8px; }
+
+  .arrow { transition: transform 0.2s; font-size: 12px; color: #86868b; }
+  .cs-card.open .arrow { transform: rotate(90deg); }
+
+  .legend { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #86868b; }
+
+  /* Gmail link */
+  .gmail-link { display: inline-block; font-size: 12px; color: #0071e3; text-decoration: none; margin-top: 8px; }
+  .gmail-link:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .container { padding: 20px 16px; }
+    .header { padding: 24px 20px; }
+    .tab-nav { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>CS ì¼ì¼ ë¦¬í¬í¸</h1>
+  <div class="date">2026ë 3ì 9ì¼ (ì) Â· ë²ì»¤ëíì¤</div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('summary')">ë¦¬ë ìì½</button>
+  <button class="tab-btn" onclick="switchTab('detail')">CS ìì¸ Â· ëµë³ ì´ì</button>
+</div>
+
+<!-- ============ TAB 1: ë¦¬ë ìì½ ============ -->
+<div id="tab-summary" class="tab-content active">
+  <div class="container">
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="num blue">22</div>
+        <div class="label">ì¤ë ì ì (ì´)</div>
+      </div>
+      <div class="summary-card">
+        <div class="num red">5</div>
+        <div class="label">ê°ë°í íì¸ íì</div>
+      </div>
+      <div class="summary-card">
+        <div class="num orange">3</div>
+        <div class="label">íµ/ì¹í¸ ì ê³ </div>
+      </div>
+      <div class="summary-card">
+        <div class="num green">4</div>
+        <div class="label">ì í ëµë³ ì²ë¦¬ ê°ë¥</div>
+      </div>
+    </div>
+
+    <div class="alert-banner">
+      <strong>â ï¸ ì£¼ì</strong> â ìì  ìì´í êµ¬ë§¤ í ë¯¸ì§ê¸ ë²ê·¸ 1ê±´, ëëì½ 300ì¸µ í´ë¦¬ì´ í ëª¹ ë¯¸ì¶í ë²ê·¸ 1ê±´ (ìì ì²¨ë¶), ì¿ í° í¹ì  ê³ì  ë¯¸ì ì© ì¬ë¬¸ì 1ê±´. íµ ì ê³  3ê±´(ê³ ëì ì , ëëì½, ì´ë²¤í¸ ìì©) ë³ë ë°ì.
+    </div>
+
+    <div class="key-issues">
+      <h3>ì£¼ì CS</h3>
+
+      <div class="issue-item">
+        <div class="issue-bullet bug"></div>
+        <div class="issue-text"><strong>ìì  êµ¬ë§¤ ìì´í ë¯¸ì§ê¸</strong> â 24k í©ê¸ 3ê° êµ¬ë§¤ ì ê³¨ëë§ ì°¨ê°, ìì´í ë¯¸ì§ê¸ <span class="issue-count">1ê±´</span></div>
+      </div>
+      <div class="issue-item">
+        <div class="issue-bullet bug"></div>
+        <div class="issue-text"><strong>ëëì½ 300ì¸µ í´ë¦¬ì´ í ëª¹ ë¯¸ì¶í</strong> â 300ì¤íì´ì§ ëí í ì¶ê° ìì¥ ì ëª¹ ì ëì´, ìì ì¦ê±° ìì <span class="issue-count">1ê±´</span></div>
+      </div>
+      <div class="issue-item">
+        <div class="issue-bullet bug"></div>
+        <div class="issue-text"><strong>1ìµ ë¬¼ëë§ê¸° í´ë¦¬ì´ ë³´ì ë¯¸ì§ê¸</strong> â ë³´ê¸/ì ë° ìº¡ì ë³´ìì´ ë©°ì¹ ê° ì ëì´ <span class="issue-count">1ê±´</span></div>
+      </div>
+      <div class="issue-item">
+        <div class="issue-bullet bug"></div>
+        <div class="issue-text"><strong>ì¿ í° í¹ì  ê³ì ë§ ë¯¸ì ì©</strong> â ì»¤ë®¤ëí° ì¿ í°ì´ ë¤ë¥¸ ì ì ë ëì§ë§ ìê¸° ê³ì ë§ ìë¨ (ì¬ë¬¸ì) <span class="issue-count">1ê±´</span></div>
+      </div>
+      <div class="issue-item">
+        <div class="issue-bullet bug"></div>
+        <div class="issue-text"><strong>ì í¬ìë®¬ë ì´ì ë­í¹ ë²ê·¸</strong> â ì í¬ìë®¬ë ì´ìì´ ì¼ë° ë­í¹ìë ë¸ì¶ë¨ <span class="issue-count">1ê±´</span></div>
+      </div>
+      <div class="issue-item">
+        <div class="issue-bullet hack"></div>
+        <div class="issue-text"><strong>íµ/ì¹í¸ ì ê³ </strong> â ê³ ëì ì  1ì, ëëì½ ì ì , ì´ë²¤í¸ ìì© <span class="issue-count">3ê±´</span></div>
+      </div>
+    </div>
+
+    <div class="key-issues">
+      <h3>ëë¨¸ì§ (ì í ëµë³ ê°ë¥ Â· ì¤íµ)</h3>
+      <div class="issue-item">
+        <div class="issue-bullet payment"></div>
+        <div class="issue-text">ì´ì©ì í ì¬ì  ë¬¸ì <span class="issue-count">1ê±´</span></div>
+      </div>
+      <div class="issue-item">
+        <div class="issue-bullet payment"></div>
+        <div class="issue-text">ëëì½ ìë² ëë¤ ìì²­ (ê¸°ë¥ ê±µì) <span class="issue-count">1ê±´</span></div>
+      </div>
+      <div class="issue-item">
+        <div class="issue-bullet payment"></div>
+        <div class="issue-text">1ìµ ë¬¼ëë§ê¸° ì´ì  ë¦¬ì ë¬¸ì <span class="issue-count">1ê±´</span></div>
+      </div>
+      <div class="issue-item">
+        <div class="issue-bullet payment"></div>
+        <div class="issue-text">ê¸°ê¸°ë³ê²½ ë°ì´í° ë³µêµ¬ (ê¸°ì¡´ ì§í ì¤) <span class="issue-count">1ê±´</span></div>
+      </div>
+      <div class="issue-item">
+        <div class="issue-bullet payment"></div>
+        <div class="issue-text">í´ì¸ ì ì  ë¹ ë¬¸ì / ë´ì© ìì <span class="issue-count">~10ê±´</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TAB 2: CS ìì¸ ============ -->
+<div id="tab-detail" class="tab-content">
+  <div class="container">
+
+    <div class="legend">
+      <div class="legend-item"><span class="cs-badge badge-dev">ê°ë°í íì¸</span> ê°ë°íì ë¬¸ì íì</div>
+      <div class="legend-item"><span class="cs-badge badge-review">CS íì¸ í ëµë³</span> CSë¶ì´ ë´ì© íì¸ í ìì  ëµë³</div>
+      <div class="legend-item"><span class="cs-badge badge-auto">ëµë³ ì´ì ìë£</span> ê·¸ëë¡ ë³´ë´ë OK</div>
+      <div class="legend-item"><span class="cs-badge badge-skip">ì¤íµ</span> ë´ì© ìì / í´ì¸</div>
+    </div>
+
+    <!-- ===== ê°ë°í íì¸ íì ===== -->
+    <h3 style="font-size:14px; color:#c62828; margin-bottom:12px; padding-left:4px;">ð´ ê°ë°í íì¸ íì</h3>
+
+    <!-- 1 -->
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">ìì  24k í©ê¸ êµ¬ë§¤ ì ìì´í ë¯¸ì§ê¸</div>
+          <div class="cs-meta">ê¹ëí Â· 50YY2O Â· v1.14.3 Â· 15:50</div>
+        </div>
+        <span class="cs-badge badge-dev">ê°ë°í íì¸</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸</div>
+          <div class="cs-original">ìì ìì 24k í©ê¸ 3ê° êµ¬ë§¤íëë° ê³¨ëë§ 900ì ìì´ì§ê³  ìíì ìë¤ì´ìë¤ì</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì (ê°ë°í íì¸ í ìì )</div>
+          <div class="cs-note">â ï¸ ê°ë°íì í´ë¹ ì ì (50YY2O)ì ìì  êµ¬ë§¤ ë¡ê·¸ íì¸ ìì²­ íì.
+ì¤ì ë¡ ê³¨ë ì°¨ê° í ìì´í ë¯¸ì§ê¸ì´ë©´ ìë ì§ê¸ ì²ë¦¬.
+
+---
+
+ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+ìì ìì 24k í©ê¸ 3ê°ë¥¼ êµ¬ë§¤íì¨ëë° ìì´íì´ ì§ê¸ëì§ ìì ë¶í¸ì ëë ¤ ì£ì¡í©ëë¤.
+
+í´ë¹ ê±´ì ëí´ ë´ë¶ ë¡ê·¸ë¥¼ íì¸í ê²°ê³¼, [íì¸ ë´ì© ê¸°ì¬]. ìì´íì ì ìì ì¼ë¡ ì§ê¸ ì²ë¦¬í´ ëë ¸ìµëë¤.
+
+ë²ê±°ë¡ì°ìê² ì§ë§ ê²ìì ìì í ì¢ë£íì  ë¤ ë¤ì ì¤ííì¬ íì¸í´ ì£¼ìê¸° ë°ëëë¤.
+
+ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd15c3d7a99569" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">ëëì½ 300ì¸µ í´ë¦¬ì´ í ëª¹ ë¯¸ì¶í ë²ê·¸</div>
+          <div class="cs-meta">ì¬ì°½ë¯¼ Â· ìë² 1ì Â· ììì²¨ë¶ Â· 03:57</div>
+        </div>
+        <span class="cs-badge badge-dev">ê°ë°í íì¸</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸</div>
+          <div class="cs-original">300 ì¤íì´ì§ë¥¼ ê¹¨ê³  ì¶ê° ìì¥ íëë° ëª¹ì´ ëì¤ì§ ìë íìì´ ë°ìëì´ ë¬¸ì ë©ì¼ ëë¦½ëë¤.
+í ìê° ê¸°ì¤ì¼ë¡ ìë²1ì ë¬ì±íìê³  ë§ì½ íë°ì£¼ìë 300ì¸µì í´ë¦¬ì´ í  ê²½ì° 1ì ë³´ìì ëêµ¬ì¸ì§ ê¶ê¸.
+ì¶ê°ë¡ 300ì¤íì´ì§ í´ë¦¬ì´ í ë²ê·¸ì¸ê±¸ ìì§ë§ ê³ì ì§ííì¬ 400,500ì¸µ ì§ííì¬ë ë¤ì ëëì½ ë ì§íí¨ì¤ë ê·¸ëë¡ ì ì©ì¸ì§ ê¶ê¸.
+(46MB ìì ì²¨ë¶)</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì (ê°ë°í íì¸ í ìì )</div>
+          <div class="cs-note">â ï¸ ê°ë°í íì¸ ì¬í­:
+1. ëëì½ 300ì¸µ ì´í ëª¹ ë¯¸ì¶í â ë§¥ì¤ ì¤íì´ì§ ì´ê³¼ ì ì²ë¦¬ ë¡ì§ íì¸
+2. 1ì ë³´ì ê¸°ì¤ (300ì¸µ ìµì´ í´ë¦¬ì´ vs ì´í ëë¬ì)
+3. ë²ê·¸ ìíìì ì§íí ê¸°ë¡(400,500ì¸µ)ì´ ë¤ì ìì¦ ì§íí¨ì¤ì ë°ìëëì§
+
+---
+
+ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+ë³´ë´ì£¼ì  ììê³¼ í¨ê» ìì¸íê² ë¬¸ìí´ ì£¼ìì ê°ì¬í©ëë¤.
+300ì¤íì´ì§ í´ë¦¬ì´ ì´í ëª¹ì´ ì¶ííì§ ìë íìì ëí´ ê°ë°íìì íì¸ ì¤ìëë¤.
+
+1ì ë³´ì ë° ì§íí¨ì¤ ì ì© ì¬ë¶ì ëí´ìë í¨ê» íì¸íì¬ ë¹ ë¥´ê² ìë´ëë¦¬ê² ìµëë¤.
+
+ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19ccecfd266356ca" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">1ìµ ë¬¼ëë§ê¸° í´ë¦¬ì´ ë³´ì ë¯¸ì§ê¸ (ë³´ê¸/ì ë° ìº¡ì)</div>
+          <div class="cs-meta">ì¬ì°½ë¯¼ Â· 11:49 Â· ì¤í¬ë¦°ì· 2ì¥</div>
+        </div>
+        <span class="cs-badge badge-dev">ê°ë°í íì¸</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸</div>
+          <div class="cs-original">ì´ì ìë ì¤íì´ì§ í´ë¦¬ì´ í ì¬ëì  ìì¥ì ì ë³´ê¸,ì ë° ìº¡ìì´ ë³´ìì¼ë¡ ëìëë° ìµê·¼ ë©°ì¹ ê° ëè² í´ë¦¬ì´ íìë ë³´ìì´ ìëì¤ëë° ì ì´ë°ê±´ê°ì?
+ì¶ê°ë¡ í´ë¹ ì¤í¨ êµ¬ë§¤ íê³  ì¶ìë° ì´ëì êµ¬ë§¤ íëì?</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì (ê°ë°í íì¸ í ìì )</div>
+          <div class="cs-note">â ï¸ ê°ë°í íì¸: ìµê·¼ ìë°ì´í¸ìì 1ìµ ë¬¼ëë§ê¸° ë³´ì ë¡ì§ì´ ë³ê²½ëìëì§ íì¸ íì.
+ì¤í¨ êµ¬ë§¤ ê²½ë¡ë ìë´ íì.
+
+---
+
+ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+1ìµ ë¬¼ëë§ê¸° í´ë¦¬ì´ í ë³´ê¸/ì ë° ìº¡ì ë³´ìì´ ì§ê¸ëì§ ìë íìì ëí´ ê°ë°íì íì¸ ì¤ìëë¤.
+íì¸ í ë¹ ë¥´ê² ìë´ëë¦¬ê² ìµëë¤.
+
+ì¤í¨ ê´ë ¨í´ìë [ì¤í¨ êµ¬ë§¤ ê²½ë¡ ìë´].
+
+ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd0807d098fabb" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">ì¿ í° í¹ì  ê³ì ë§ ë¯¸ì ì© (ì¬ë¬¸ì)</div>
+          <div class="cs-meta">ì ì´ë Â· 0BQLQN Â· v1.14.3 Â· ì´ë¯¸ 1ì°¨ ëµë³ ìë£</div>
+        </div>
+        <span class="cs-badge badge-dev">ê°ë°í íì¸</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸ (ì¬ë¬¸ì)</div>
+          <div class="cs-original">[1ì°¨] ëª¨ë  ì¿¡í°ì´ ì í¨íì§ ìë¤ê³  ë¹ëë¤.
+â 1ì°¨ ëµë³: ì¿ í°ì ì´ë²¤í¸/ì í´/ì»¤ë®¤ëí° ê²½ë¡ë¡ ì ê³µ, ê°ë³ ìë´ ì´ë ¤ì
+[ì¬ë¬¸ì] ì»¤ë®¤ëí°ì ê³µì ëë ì¿ í°ë¤ ì¤ ì ì©ëë ì¿ í°ì´ ìëë° ì  ê³ì ìë ì ì©ì´ ìë©ëë¤.</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì (ê°ë°í íì¸ í ìì )</div>
+          <div class="cs-note">â ï¸ 1ì°¨ ëµë³ì´ ì¿ í° ìë´ ê±°ì ì´ìëë°, ì¬ë¬¸ì ë´ì©ì "ë¤ë¥¸ ì ì ë ëë ì¿ í°ì´ ë³¸ì¸ë§ ì ëë¤"ë ê².
+â í´ë¹ ê³ì (0BQLQN)ì ì¿ í° ì¬ì© ë¡ê·¸ ë° ì¿ í° ìì¤í ì¤ë¥ ì¬ë¶ ê°ë°í íì¸ íì.
+
+---
+
+ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+ë¤ì íë² ë¬¸ìí´ ì£¼ìì ê°ì¬í©ëë¤.
+ë¤ë¥¸ ì ì ë¶ë¤ì ì ì©ëë ì¿ í°ì´ ê³ ê°ëì ê³ì ììë§ ì ì©ëì§ ìë ìí©ì´ìêµ°ì.
+
+í´ë¹ ë¶ë¶ì ê°ë°íìì íì¸ ì¤ìëë¤. íì¸ì´ ìë£ëë ëë¡ ë¹ ë¥´ê² ìë´ëë¦¬ê² ìµëë¤.
+
+ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd0bb4b449f4f4" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">ì í¬ìë®¬ë ì´ì ì¼ë° ë­í¹ ë¸ì¶ ë²ê·¸</div>
+          <div class="cs-meta">ê¹ê¹ë¯¼ì± Â· 2AEK11 Â· v0.2.57 Â· 09:35</div>
+        </div>
+        <span class="cs-badge badge-dev">ê°ë°í íì¸</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸</div>
+          <div class="cs-original">ë²ê·¸ ëª»ì¡ëì? ì í¬ìë¬¼ë ì´ì ê³ì ëì¤ëë° ì¼ë° ë­í¹ìë ìëë°</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì (ê°ë°í íì¸ í ìì )</div>
+          <div class="cs-note">â ï¸ ì í¬ìë®¬ë ì´ìì´ ì¼ë° ë­í¹ìë ë¸ì¶ëë ê±´ì´ ë°ë³µ ë¬¸ìë¨. ê°ë°íì ë²ê·¸ íì¸ ìì²­.
+
+---
+
+ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+ì í¬ ìë®¬ë ì´ì ê´ë ¨ ë¶í¸ì ëë ¤ ì£ì¡í©ëë¤.
+ë§ìí´ ì£¼ì  íìì ëí´ ê°ë°íìì íì¸ í ì¡°ì¹í  ìì ìëë¤.
+
+ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd005b5c0aa373" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+
+    <!-- ===== íµ/ì¹í¸ ì ê³  (ê°ë°í ì ë¬) ===== -->
+    <h3 style="font-size:14px; color:#e65100; margin: 24px 0 12px 4px;">ð  íµ/ì¹í¸ ì ê³  â ê°ë°í ì ë¬</h3>
+
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">ê³ ëì ì  ë­í¹ 1ì íµ ì ê³ </div>
+          <div class="cs-meta">ìê±´ì° Â· 4SX3CS Â· v0.0.13 Â· 06:35</div>
+        </div>
+        <span class="cs-badge badge-review">CS íì¸ í ëµë³</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸</div>
+          <div class="cs-original">ì´ë²ì ìê¸´ ê³ ëì ì  ë­í¹1ì íµ ì°ë¤ì</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì</div>
+          <div class="cs-draft">ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+ìì¤í ì ë³´ ê°ì¬ëë¦½ëë¤. í´ë¹ ì ì ì ëí´ íì¸ í ì ì í ì¡°ì¹ë¥¼ ì§ííê² ìµëë¤.
+
+ë¹ì ìì ì¸ íë ì´ì ëí´ìë ì§ìì ì¼ë¡ ëª¨ëí°ë§íê³  ìì¼ë©°, íì¸ëë ê²½ì° ì ì¬ë¥¼ ì§ííê³  ììµëë¤.
+
+ì¾ì í ê²ì íê²½ì ìí´ ë¸ë ¥íê² ìµëë¤. ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19ccf60fc39f6dff" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">ëëì½ í´ ì ì  ë°´ ìì²­</div>
+          <div class="cs-meta">ì´ì±ì°¬ Â· 1PYNB3 Â· v1.13.5 Â· 05:10 Â· ì¤í¬ë¦°ì· ì²¨ë¶</div>
+        </div>
+        <span class="cs-badge badge-review">CS íì¸ í ëµë³</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸</div>
+          <div class="cs-original">ëëê¸° ì§ì ì ëíë ëëì½ íµì ì  ì ì¬ ìì²­ ëë¦½ëë¤. (ì¤í¬ë¦°ì· ì²¨ë¶)</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì</div>
+          <div class="cs-draft">ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+ìì¤í ì ë³´ ê°ì¬ëë¦½ëë¤. ë³´ë´ì£¼ì  ì¤í¬ë¦°ì·ì íì¸íìì¼ë©°, í´ë¹ ì ì ì ëí´ ë´ë¶ ê²í° í ì ì í ì¡°ì¹ë¥¼ ì§ííê² ìµëë¤.
+
+ë¹ì ìì ì¸ íë ì´ì ëí´ìë ì§ìì ì¼ë¡ ëª¨ëí°ë§íê³  ìì¼ë©°, íì¸ëë ê²½ì° ì ì¬ë¥¼ ì§ííê³  ììµëë¤.
+
+ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19ccf1314d6b3e5f" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">ì´ë²¤í¸ ìì© ì ê³ </div>
+          <div class="cs-meta">ì í¥ì¤ Â· JHVN9L Â· v1.14.3 Â· 11:44 Â· ì¤í¬ë¦°ì· ì²¨ë¶</div>
+        </div>
+        <span class="cs-badge badge-review">CS íì¸ í ëµë³</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸</div>
+          <div class="cs-original">(ì ëª©: ì´ë²¤í¸ ìì© ì ê³ . ë³¸ë¬¸ì ì¤í¬ë¦°ì·ë§ ì²¨ë¶, íì¤í¸ ë´ì© ìì)</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì</div>
+          <div class="cs-draft">ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+ì´ë²¤í¸ ìì©ì ëí´ ì ë³´í´ ì£¼ìì ê°ì¬í©ëë¤. ë³´ë´ì£¼ì  ìë£ë¥¼ íì¸íì¬ ë´ë¶ ê²í  í ì ì í ì¡°ì¹ë¥¼ ì§ííê² ìµëë¤.
+
+ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd07b5698962a6" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+
+    <!-- ===== ì í ëµë³ ê°ë¥ ===== -->
+    <h3 style="font-size:14px; color:#2e7d32; margin: 24px 0 12px 4px;">ð¢ ì í ëµë³ ì²ë¦¬ ê°ë¥ (ê·¸ëë¡ ë°ì¡ OK)</h3>
+
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">ì´ì© ì¤ì§ ì¬ì  ë¬¸ì</div>
+          <div class="cs-meta">ì´ì§ì²  Â· M6YAEW Â· v0.2.57 Â· 08:58</div>
+        </div>
+        <span class="cs-badge badge-auto">ëµë³ ì´ì ìë£</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸</div>
+          <div class="cs-original">ì ì¤ì§ë¥¼ ë¹íì£ ? ìµì¸íë¤ì</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì</div>
+          <div class="cs-draft">ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+ì´ì© ì íì¼ë¡ ë¶í¸ì ëë ¤ ì£ì¡í©ëë¤. íì¸ ê²°ê³¼, ê³ ê°ëì ê³ì ì ë¹ì ìì ì¸ íë ì´ê° ê°ì§ëì´ ì´ì©ì´ ì íë ìíìëë¤.
+
+ì´ì© ì íì ê²ìì ê³µì ì±ì ì ì§íê¸° ìí´ ë¹ì ìì ì¸ ë°ì´í°ê° ê°ì§ë ê³ì ì ëí´ ì§íëë©°, êµ¬ì²´ì ì¸ ê°ì§ í­ëª©ì ëí´ìë ë³ëë¡ ìë´ëë¦¬ê¸° ì´ë ¤ì´ ì  ìí´ ë¶íëë¦½ëë¤.
+
+ë§ì½ ë³¸ì¸ì´ ì ìì ì¼ë¡ íë ì´íì¨ë¤ê³  íë¨íì ë¤ë© ì¬ì©íì  ê¸°ê¸° íê²½ê³¼ í¨ê» ë¤ì íë² ë¬¸ìí´ ì£¼ìë©´ ì¬ê²í í´ ëë¦¬ê² ìµëë¤.
+
+ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19ccfe377f5805da" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">ëëì½ ìë² ëë¤ ìì²­ (ê¸°ë¥ ê±´ì)</div>
+          <div class="cs-meta">ì ì¢í Â· Z5KIYF Â· v1.14.3 Â· 09:40</div>
+        </div>
+        <span class="cs-badge badge-auto">ëµë³ ì´ì ìë£</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸</div>
+          <div class="cs-original">ìëíì¸ì ëëì½ ìë²ë ì¢ ëë¤ì¼ë¡ ëë ¤ì£¼ë©´ ìë ê¹ì??</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì</div>
+          <div class="cs-draft">ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+ëëì½ ìë² ëë¤ ë°°ì ì ëí ìì¤í ìê²¬ ê°ì¬ëë¦½ëë¤. í´ë¹ ê±´ìì¬í­ì ê°ë°íì ì ë¬íì¬ í¥í ìë°ì´í¸ ì ì°¸ê³ íëë¡ íê² ìµëë¤.
+
+í­ì ê²ìì ì¦ê²¨ì£¼ìì ê°ì¬ëë¦¬ë©°, ë ëì ê²ì ê²½íì ìí´ ë¸ë ¥íê² ìµëë¤.
+
+ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd00a72afc576d" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">1ìµ ë¬¼ëë§ê¸° ì´ì° ë¦¬ì ë¬¸ì</div>
+          <div class="cs-meta">HC K Â· EOLFMZ Â· v1.14.3 Â· 11:44</div>
+        </div>
+        <span class="cs-badge badge-auto">ëµë³ ì´ì ìë£</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸</div>
+          <div class="cs-original">1ìµë¬¼ëë§ê¸° ë°ì ì´ì ì£¼ëê±´ ë¦¬ìì´ìëëì? ëª»ë°ìì§ ì¤ëëì ë¬¸ìí©ëë¤</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì</div>
+          <div class="cs-draft">ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+1ìµ ë¬¼ëë§ê¸° ì´ì° ë³´ìì ëí´ ë¬¸ìí´ ì£¼ìì ê°ì¬í©ëë¤.
+í´ë¹ ì´ì  ë³´ìì ì¼ì  ì¡°ê±´ ë¬ì± ì ì§ê¸ëë©°, ìëì¼ë¡ ë¦¬ìëì§ë ììµëë¤.
+
+ë³´ë¤ ìì¸í ë³´ì ì¡°ê±´ì ê²ì ë´ í´ë¹ ì½íì¸ ì ìë´ë¥¼ ì°¸ê³  ë¶íëë¦½ëë¤. ì¶ê° ë¬¸ìì¬í­ì´ ìì¼ìë©´ í¸íê² ì°ë½í´ ì£¼ì¸ì.
+
+ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd07beb433660e" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+    <div class="cs-card" onclick="this.classList.toggle('open')">
+      <div class="cs-card-header">
+        <div class="cs-title-area">
+          <div class="cs-title">ê¸°ê¸°ë³ê²½ ë°ì´í° ë³µêµ¬ (ê¸°ì¡´ ì¤ë ë ì§í ì¤)</div>
+          <div class="cs-meta">kyr2798 Â· 799DD4 Â· ì¶ê° ì ë³´ íì </div>
+        </div>
+        <span class="cs-badge badge-done">ê¸°ì¡´ ì§í ì¤</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìë¬¸ (ì¶ê° íì )</div>
+          <div class="cs-original">ê¸°ì¡´ í´ëí°ì íë§¤ë¥¼ ìí´ ì´ê¸°í ë° ë°ë©ë ìí©.
+ì¬ì© ê³ì : êµ¬ê¸ (kyr2798@nate.com), ëë¤ì: insecteco.
+ê²°ì  ë´ì­ ìì. ê·¸ ì¸ ì ë³´ ê¸°ìµ ì ë¨.</div>
+        </div>
+        <div class="cs-section">
+          <div class="cs-section-label">ð¬ ëµë³ ì´ì</div>
+          <div class="cs-draft">ìëíì¸ì, íë²ì»¤ëìëë¤.
+
+ì¶ê° ì ë³´ ë³´ë´ì£¼ìì ê°ì¬í©ëë¤. ëë¤ì(insecteco) ë° ê³ì  ì ë³´ë¥¼ ë°íì¼ë¡ ë°ì´í° ë³µêµ¬ë¥¼ ì§íí´ ëë¦¬ê² ìµëë¤.
+
+íì¸ í ë³ëë¡ ìë´ëë¦¬ê² ìµëë¤.
+
+ê°ì¬í©ëë¤.
+íë²ì»¤ë ëë¦¼</div>
+        </div>
+        <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd05d849e4cfd4" target="_blank">ð§ Gmailìì ë³´ê¸° â</a>
+      </div>
+    </div>
+
+
+    <!-- ===== ì¤íµ ===== -->
+    <h3 style="font-size:14px; color:#9e9e9e; margin: 24px 0 12px 4px;">âª ì¤íµ (ë´ì© ìì / í´ì¸ ì ì )</h3>
+
+    <div class="cs-card">
+      <div class="cs-card-header" onclick="this.parentElement.classList.toggle('open')">
+        <div class="cs-title-area">
+          <div class="cs-title" style="color:#86868b;">í´ì¸ ì ì  Â· ë¹ ë¬¸ì ì¹ 10ê±´</div>
+          <div class="cs-meta">ì¸ëë¤ìì(3), íêµ­(2), ë² í¸ë¨(1), ë¸ë¼ì§(1), ì¤êµ­ì´(1), ìì´(2) ë±</div>
+        </div>
+        <span class="cs-badge badge-skip">ì¤íµ</span>
+        <span class="arrow">â¶</span>
+      </div>
+      <div class="cs-card-body">
+        <div class="cs-section">
+          <div class="cs-section-label">ìì¸</div>
+          <div class="cs-original">â¢ Abiqya Indra Prasetya (RV4RH0) â ì¤ë³µ 3ê±´, ë´ì© ìì
+â¢ Lucky asoy gaming (MG88JI) â ë´ì© ìì
+â¢ ì²í¬ì (GDJ3ZR) â ì¤ë³µ 2ê±´, ë´ì© ìì (ìì´ ì ëª©)
+â¢ and Lordelo (KJHQLJ) â ë´ì© ìì
+â¢ Mercer Alex (UON63O) â ì¤êµ­ì´: "ì ë³µì¶©ì´ ëë¬´ ê°íë¤, ëì² ë°©ë²?"
+â¢ à¸£à¸±à¸à¸§à¸±à¸à¸à¹ (4YQN47) â ë´ì© ìì
+â¢ à¸à¹à¸² à¸à¸­à¸à¸à¹ (UFGN1X) â ë´ì© ìì
+â¢ HoÃ ng Danh (3GBJOL) â ë´ì© ìì
+â¢ Shakir Momin (A2YS5D) â ë´ì© ìì
+â¢ david woods â ì¿¡í° ë¯¸ìë (ìì´, ì´ë¯¸ ëµë³ ìë£ ì¤ë ë)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
