@@ -3,895 +3,443 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>벙커디펜스 CS 일일 리포트 — 2026년 3월 10일</title>
+<title>CS 일일 리포트 — 2026년 3월 11일</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif; background: #f5f5f7; color: #1d1d1f; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif; background: #f2f2f7; color: #1c1c1e; min-height: 100vh; }
 
   /* Header */
-  .header { background: #1d1d1f; color: #f5f5f7; padding: 24px 32px; }
-  .header h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; }
-  .header .subtitle { font-size: 13px; color: #86868b; margin-top: 4px; }
+  .header { background: #fff; border-bottom: 1px solid #e5e5ea; padding: 20px 24px 16px; position: sticky; top: 0; z-index: 100; }
+  .header-top { display: flex; align-items: center; gap: 12px; }
+  .header-icon { font-size: 28px; }
+  .header-title { font-size: 20px; font-weight: 700; color: #1c1c1e; }
+  .header-date { font-size: 13px; color: #8e8e93; margin-top: 2px; }
 
-  /* Tab nav */
-  .tabs { display: flex; background: #fff; border-bottom: 1px solid #e5e5ea; padding: 0 32px; }
-  .tab { padding: 14px 20px; font-size: 14px; font-weight: 500; color: #86868b; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
-  .tab.active { color: #0071e3; border-bottom-color: #0071e3; }
-  .tab:hover { color: #1d1d1f; }
+  /* Tabs */
+  .tabs { display: flex; gap: 0; background: #f2f2f7; border-radius: 10px; padding: 3px; margin-top: 14px; }
+  .tab { flex: 1; text-align: center; padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #8e8e93; border: none; background: transparent; }
+  .tab.active { background: #fff; color: #1c1c1e; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
 
-  /* Tab content */
-  .tab-content { display: none; padding: 28px 32px; max-width: 1100px; margin: 0 auto; }
-  .tab-content.active { display: block; }
+  /* Content */
+  .content { display: none; padding: 20px 16px; max-width: 760px; margin: 0 auto; }
+  .content.active { display: block; }
 
-  /* Summary cards */
-  .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
-  .card { background: #fff; border-radius: 14px; padding: 20px; }
-  .card .num { font-size: 36px; font-weight: 700; line-height: 1; }
-  .card .label { font-size: 12px; color: #86868b; margin-top: 6px; }
-  .card.red .num { color: #ff3b30; }
-  .card.orange .num { color: #ff9500; }
-  .card.green .num { color: #34c759; }
-  .card.gray .num { color: #aeaeb2; }
-  .card.total .num { color: #1d1d1f; }
+  /* Alert Banner */
+  .alert-banner { background: linear-gradient(135deg, #ff3b30 0%, #ff6b35 100%); color: #fff; border-radius: 14px; padding: 16px 18px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 12px; }
+  .alert-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+  .alert-text { font-size: 14px; line-height: 1.5; }
+  .alert-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
 
-  /* Alert banner */
-  .alert { background: #fff3cd; border: 1px solid #ffc107; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 12px; }
-  .alert .icon { font-size: 20px; flex-shrink: 0; }
-  .alert .text { font-size: 14px; line-height: 1.6; }
-  .alert .text strong { display: block; font-weight: 600; margin-bottom: 4px; }
+  /* Summary Cards */
+  .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+  .card { background: #fff; border-radius: 14px; padding: 16px; }
+  .card-label { font-size: 12px; color: #8e8e93; font-weight: 500; margin-bottom: 4px; }
+  .card-value { font-size: 28px; font-weight: 700; }
+  .card-value.total { color: #1c1c1e; }
+  .card-value.red { color: #ff3b30; }
+  .card-value.orange { color: #ff9500; }
+  .card-value.green { color: #34c759; }
 
-  /* Key issues list */
-  .section-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #1d1d1f; }
-  .issues-list { background: #fff; border-radius: 14px; padding: 20px 24px; margin-bottom: 24px; }
-  .issue-item { padding: 10px 0; border-bottom: 1px solid #f5f5f7; font-size: 14px; line-height: 1.5; display: flex; gap: 10px; align-items: flex-start; }
+  /* Issue List */
+  .section-title { font-size: 15px; font-weight: 700; color: #1c1c1e; margin-bottom: 10px; padding: 0 4px; }
+  .issue-list { background: #fff; border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
+  .issue-item { padding: 14px 16px; border-bottom: 1px solid #f2f2f7; display: flex; align-items: flex-start; gap: 10px; }
   .issue-item:last-child { border-bottom: none; }
-  .issue-item .badge { flex-shrink: 0; font-size: 16px; }
+  .issue-dot { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .issue-content { flex: 1; }
+  .issue-title { font-size: 14px; font-weight: 600; }
+  .issue-sub { font-size: 12px; color: #8e8e93; margin-top: 2px; }
 
-  /* CS Detail section */
-  .section-header { font-size: 15px; font-weight: 600; margin: 28px 0 12px; padding-bottom: 8px; border-bottom: 2px solid #e5e5ea; display: flex; align-items: center; gap: 8px; }
-  .section-header .count { font-size: 13px; font-weight: 500; color: #86868b; background: #f5f5f7; padding: 2px 8px; border-radius: 20px; }
+  /* CS Detail Cards */
+  .cs-section-header { font-size: 13px; font-weight: 700; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.5px; padding: 16px 4px 8px; }
+  .cs-card { background: #fff; border-radius: 14px; overflow: hidden; margin-bottom: 12px; cursor: pointer; transition: box-shadow 0.2s; }
+  .cs-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .cs-card.green-card { background: #f8fdf9; }
 
-  /* CS Card */
-  .cs-card { background: #fff; border-radius: 14px; margin-bottom: 12px; overflow: hidden; border: 1px solid #e5e5ea; }
-  .cs-card.green-card { background: #f8fdf9; border-color: #c3e6cb; }
-  .cs-card-header { padding: 16px 20px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .cs-card-header:hover { background: rgba(0,0,0,0.02); }
-  .cs-card.green-card .cs-card-header:hover { background: rgba(52,199,89,0.05); }
+  .cs-card-header { padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
+  .cs-badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+  .badge-red { background: #fff1f0; color: #ff3b30; }
+  .badge-orange { background: #fff8f0; color: #ff9500; }
+  .badge-green { background: #f0fdf4; color: #34c759; }
+  .badge-gray { background: #f2f2f7; color: #8e8e93; }
+
   .cs-card-title { font-size: 14px; font-weight: 600; flex: 1; }
-  .cs-card-meta { font-size: 12px; color: #86868b; margin-top: 3px; font-weight: 400; }
-  .cs-badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
-  .badge-red { background: #ffe5e5; color: #ff3b30; }
-  .badge-orange { background: #fff3e0; color: #ff9500; }
-  .badge-green { background: #e5f9ee; color: #34c759; }
-  .cs-chevron { font-size: 12px; color: #86868b; transition: transform 0.2s; flex-shrink: 0; }
-  .cs-card.open .cs-chevron { transform: rotate(180deg); }
+  .cs-card-time { font-size: 12px; color: #8e8e93; white-space: nowrap; }
+  .cs-card-arrow { font-size: 12px; color: #c7c7cc; transition: transform 0.2s; }
+  .cs-card.open .cs-card-arrow { transform: rotate(90deg); }
 
-  /* Draft preview (green cards collapsed) */
-  .draft-preview { padding: 0 20px 14px; font-size: 12px; color: #3a8a4f; line-height: 1.5; max-height: 80px; overflow: hidden; position: relative; }
-  .draft-preview::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 30px; background: linear-gradient(transparent, #f8fdf9); }
+  .cs-card-meta { padding: 0 16px 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .meta-chip { font-size: 11px; background: #f2f2f7; color: #636366; padding: 3px 8px; border-radius: 20px; }
 
-  /* Card body */
-  .cs-card-body { padding: 0 20px 20px; border-top: 1px solid #f0f0f5; display: none; }
+  /* Draft Preview (for green cards) */
+  .draft-preview { padding: 0 16px 12px; }
+  .draft-preview-box { background: #e8f5e9; border-radius: 10px; padding: 10px 12px; font-size: 13px; color: #2e7d32; line-height: 1.5; max-height: 80px; overflow: hidden; position: relative; }
+  .draft-preview-box::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 30px; background: linear-gradient(transparent, #e8f5e9); border-radius: 0 0 10px 10px; }
+
+  .cs-card-body { padding: 0 16px 16px; display: none; }
   .cs-card.open .cs-card-body { display: block; }
-  .cs-card.green-card .cs-card-body { border-top-color: #c3e6cb; }
-  .info-row { display: flex; gap: 16px; flex-wrap: wrap; margin: 14px 0 12px; }
-  .info-chip { background: #f5f5f7; border-radius: 8px; padding: 5px 10px; font-size: 12px; color: #3c3c43; }
-  .info-chip span { font-weight: 600; }
-  .cs-card.green-card .info-chip { background: #eaf7ef; }
 
-  .field-label { font-size: 11px; font-weight: 600; color: #86868b; text-transform: uppercase; letter-spacing: 0.5px; margin: 14px 0 6px; }
-  .field-content { font-size: 13px; line-height: 1.65; color: #1d1d1f; white-space: pre-wrap; background: #f9f9fb; border-radius: 10px; padding: 12px 14px; }
-  .cs-card.green-card .field-content.draft { background: #eaf7ef; border: 1px solid #c3e6cb; }
-  .dev-note { background: #fff8e1; border: 1px solid #ffe082; border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #7a5c00; margin-top: 10px; }
-  .gmail-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 14px; font-size: 12px; color: #0071e3; text-decoration: none; }
-  .gmail-link:hover { text-decoration: underline; }
+  .body-section { margin-bottom: 14px; }
+  .body-label { font-size: 11px; font-weight: 700; color: #8e8e93; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .body-text { font-size: 13px; line-height: 1.6; color: #3a3a3c; background: #f9f9f9; border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; word-break: break-word; }
+  .body-text.draft { background: #f0fdf4; color: #1c4731; border-left: 3px solid #34c759; }
+  .body-text.warning { background: #fff8f0; color: #7c3f00; border-left: 3px solid #ff9500; }
 
-  /* Copy button */
-  .draft-header { display: flex; align-items: center; justify-content: space-between; margin: 14px 0 6px; }
-  .draft-header .field-label { margin: 0; }
-  .copy-btn { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; font-size: 12px; font-weight: 500; color: #0071e3; background: #e8f1fb; border: 1px solid #b3d0f5; border-radius: 20px; cursor: pointer; transition: all 0.15s; user-select: none; }
-  .copy-btn:hover { background: #d0e6fb; border-color: #0071e3; }
-  .copy-btn.copied { color: #34c759; background: #e5f9ee; border-color: #a5ddb8; }
-  .copy-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+  .gmail-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #007aff; text-decoration: none; padding: 6px 12px; background: #f0f8ff; border-radius: 20px; margin-top: 4px; }
+  .gmail-link:hover { background: #dbeeff; }
 
-  @media (max-width: 600px) {
-    .header { padding: 20px 16px; }
-    .tabs { padding: 0 16px; }
-    .tab-content { padding: 20px 16px; }
+  /* Divider */
+  hr { border: none; border-top: 1px solid #f2f2f7; margin: 16px 0; }
+
+  /* Skip section */
+  .skip-info { background: #fff; border-radius: 14px; padding: 14px 16px; color: #8e8e93; font-size: 13px; line-height: 1.6; }
+
+  @media (max-width: 480px) {
     .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .header { padding: 16px; }
+    .content { padding: 16px 12px; }
   }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>📋 벙커디펜스 CS 일일 리포트</h1>
-  <div class="subtitle">2026년 3월 10일 (화) · 분석 기준: 2026/3/9 이후 수신 메일</div>
-</div>
-
-<div class="tabs">
-  <div class="tab active" onclick="showTab('summary')">리더 요약</div>
-  <div class="tab" onclick="showTab('detail')">CS 상세 · 답변 초안</div>
+  <div class="header-top">
+    <div class="header-icon">🛡️</div>
+    <div>
+      <div class="header-title">벙커디펜스 CS 리포트</div>
+      <div class="header-date">2026년 3월 11일 수요일 · 자동 생성</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('summary')">📊 리더 요약</button>
+    <button class="tab" onclick="switchTab('detail')">📋 CS 상세 · 답변 초안</button>
+  </div>
 </div>
 
 <!-- TAB 1: 리더 요약 -->
-<div id="tab-summary" class="tab-content active">
+<div id="tab-summary" class="content active">
+
+  <div class="alert-banner">
+    <div class="alert-icon">🚨</div>
+    <div class="alert-text">
+      <div class="alert-title">즉시 확인 필요 — 결제 분쟁 에스컬레이션</div>
+      반현철 유저(BDYMNP)가 Apple 환불을 2차례 거절당한 후 아이템 재지급을 요청하고 있습니다. 재문의가 2건 접수됐으며 응대 지연으로 유저 불만이 높은 상태입니다.
+    </div>
+  </div>
 
   <div class="cards-grid">
-    <div class="card total">
-      <div class="num">40</div>
-      <div class="label">총 수신 메일</div>
+    <div class="card">
+      <div class="card-label">총 접수 (신규)</div>
+      <div class="card-value total">5건</div>
     </div>
-    <div class="card total">
-      <div class="num">17</div>
-      <div class="label">실 CS 케이스</div>
+    <div class="card">
+      <div class="card-label">🔴 개발팀 확인 필요</div>
+      <div class="card-value red">2건</div>
     </div>
-    <div class="card red">
-      <div class="num">5</div>
-      <div class="label">🔴 개발팀 확인 필요</div>
+    <div class="card">
+      <div class="card-label">🟢 즉시 답변 가능</div>
+      <div class="card-value green">3건</div>
     </div>
-    <div class="card orange">
-      <div class="num">4</div>
-      <div class="label">🟠 CS 검토 필요</div>
-    </div>
-    <div class="card green">
-      <div class="num">8</div>
-      <div class="label">🟢 답변 초안 완료</div>
-    </div>
-    <div class="card gray">
-      <div class="num">23</div>
-      <div class="label">⚪ 스킵 (빈 문의 등)</div>
+    <div class="card">
+      <div class="card-label">⚪ 스킵 (스팸·빈 문의)</div>
+      <div class="card-value" style="color:#8e8e93;">4건</div>
     </div>
   </div>
 
-  <div class="alert">
-    <div class="icon">🚨</div>
-    <div class="text">
-      <strong>결제 관련 미지급 2건 — 즉시 확인 요망</strong>
-      Pronput L (gamerId D2X342): Gold Package 결제 후 업데이트로 패키지 소실 / 김도현 (gamerId 50YY2O): 24k 합금 3개 구매 후 골드 900원 차감됐으나 상품 미지급. 두 건 모두 결제 로그 즉시 확인 및 보상 조치 필요합니다.
+  <div class="section-title">📌 오늘의 주요 이슈</div>
+  <div class="issue-list">
+    <div class="issue-item">
+      <div class="issue-dot">🔴</div>
+      <div class="issue-content">
+        <div class="issue-title">결제 분쟁 에스컬레이션 — 반현철 (BDYMNP)</div>
+        <div class="issue-sub">구매 아이템 회수 + Apple 환불 2차 거절 → 아이템 재지급 요청. 재문의 2건 연속 접수.</div>
+      </div>
+    </div>
+    <div class="issue-item">
+      <div class="issue-dot">🔴</div>
+      <div class="issue-content">
+        <div class="issue-title">이벤트 버그 스크린샷 신고 — 정향준 (JHVN9L)</div>
+        <div class="issue-sub">v1.14.3 (비정상적 버전) 기기에서 이벤트 버그 스크린샷 첨부 신고. 텍스트 없음, 이미지 확인 필요.</div>
+      </div>
+    </div>
+    <div class="issue-item">
+      <div class="issue-dot">🟢</div>
+      <div class="issue-content">
+        <div class="issue-title">1억 물량막기 레벨 12 이후 문의 — 2건</div>
+        <div class="issue-sub">이원재(0N7TQ7), 심창민 재문의 — 현재 최고 난이도 안내 가능.</div>
+      </div>
+    </div>
+    <div class="issue-item">
+      <div class="issue-dot">🟢</div>
+      <div class="issue-content">
+        <div class="issue-title">점수 기준 문의 — 김김민욱 (2AEK11)</div>
+        <div class="issue-sub">게임 점수 산정 기준 일반 문의. 스크린샷 첨부.</div>
+      </div>
+    </div>
+    <div class="issue-item">
+      <div class="issue-dot">✅</div>
+      <div class="issue-content">
+        <div class="issue-title">해결 완료 재확인 — 2건</div>
+        <div class="issue-sub">갓김 ("감사합니다"), 김현희 ("정상으로왔네요") — 기존 문의 해결 후 감사 회신.</div>
+      </div>
     </div>
   </div>
 
-  <div class="section-title">주요 이슈 요약</div>
-  <div class="issues-list">
+  <div class="section-title">📬 수신함 현황</div>
+  <div class="issue-list">
     <div class="issue-item">
-      <span class="badge">🔴</span>
-      <div><strong>결제 후 아이템 미지급 2건</strong> — Gold Package 소실 (iOS, D2X342) / 24k 합금 3개 구매 후 미지급 (Android, 50YY2O). 결제 DB 확인 및 수동 지급 필요.</div>
-    </div>
-    <div class="issue-item">
-      <span class="badge">🔴</span>
-      <div><strong>유닛 공격 중단 버그 재발</strong> — 미니샷이 게임 중반부터 공격을 멈추는 버그. 이전 패치로 해결됐다고 알려진 버그가 v0.0.13에서 재현 중 (김준영, P230W6).</div>
-    </div>
-    <div class="issue-item">
-      <span class="badge">🔴</span>
-      <div><strong>고스테이지 배속 시 피해 미적용 버그</strong> — 스테이지 50+ 및 던전에서 1.5x/2x 배속 시 적에게 피해가 안 들어가는 현상. Zeus 사용 시 심각. (Gyodai, ZPAQIS, Lenovo 태블릿)</div>
-    </div>
-    <div class="issue-item">
-      <span class="badge">🔴</span>
-      <div><strong>1억물량막기 보급/정밀 캡슐 보상 미지급</strong> — 며칠째 던전 클리어 후 보상 미지급 (심창민, 스크린샷 첨부). 보상 지급 로직 확인 필요.</div>
-    </div>
-    <div class="issue-item">
-      <span class="badge">🟠</span>
-      <div><strong>핵/치트 재신고 3건 (이성찬)</strong> — 드랍십 종료 후 펀치킹 1등(데미지 핵 의혹), 3등(미출시 초월유닛·5성 스킨 보유, 전투력 14,000대). 스크린샷 6장 첨부.</div>
-    </div>
-    <div class="issue-item">
-      <span class="badge">🟠</span>
-      <div><strong>드랍십 이벤트 조작 의혹 신고</strong> — 외국인 유저 Spencer Monroe (H36XUE): might 1800/카드 적은 유저가 순식간에 247웨이브 돌파해 1위 역전. 수상한 계정 확인 필요.</div>
-    </div>
-    <div class="issue-item">
-      <span class="badge">🟠</span>
-      <div><strong>전투시뮬레이션 계정 일반 랭킹 출현</strong> — 김김민욱 (2AEK11): 전투시뮬레이션이 일반 랭킹에도 보인다고 신고. 테스트 계정 혼입 여부 확인 필요.</div>
-    </div>
-    <div class="issue-item">
-      <span class="badge">🟠</span>
-      <div><strong>이벤트 악용 신고</strong> — 정향준 (JHVN9L): 이벤트 악용 사례 이미지 첨부 신고. CS팀 이미지 확인 후 조치 필요.</div>
-    </div>
-    <div class="issue-item">
-      <span class="badge">🟢</span>
-      <div><strong>정형 문의 8건</strong> — 계정 초기화/계정 복구, 쿠폰 문의(2건), 의무병 스킬 문의, 계정 삭제, 드랍쉽 서버 건의, 1억물량막기 열쇠 리셋 여부, 배속 버그(초안 작성). 모두 답변 초안 완료.</div>
-    </div>
-    <div class="issue-item">
-      <span class="badge">⚪</span>
-      <div><strong>스킵 23건</strong> — 내용 없는 빈 문의 (해외 포함), 중복 제출, 시스템 메일, 김현희 게임 초기화 문의(스레드 내 "정상으로왔네요" 확인, 자기 해결).</div>
+      <div class="issue-dot">📩</div>
+      <div class="issue-content">
+        <div class="issue-title">총 12개 메시지 수신</div>
+        <div class="issue-sub">활성 CS 5건 · 해결 확인 2건 · 스킵 4건 (스팸 2 + 빈 양식 2) · 중복 1건</div>
+      </div>
     </div>
   </div>
 
 </div>
 
 <!-- TAB 2: CS 상세 -->
-<div id="tab-detail" class="tab-content">
+<div id="tab-detail" class="content">
 
   <!-- 🔴 개발팀 확인 필요 -->
-  <div class="section-header">
-    🔴 개발팀 확인 필요
-    <span class="count">5건</span>
-  </div>
+  <div class="cs-section-header">🔴 개발팀 확인 필요 — 2건</div>
 
-  <!-- Card 1: Pronput L -->
+  <!-- CS 1: 반현철 결제 분쟁 -->
   <div class="cs-card" onclick="toggleCard(this)">
     <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">💳 Gold Package 결제 후 업데이트로 패키지 소실</div>
-        <div class="cs-card-meta">Pronput L · D2X342 · iPhone16,2 · iOS 26.3.1 · v0.2.57 · 3/9 22:32 (TH)</div>
-      </div>
-      <span class="cs-badge badge-red">🔴 개발팀</span>
-      <span class="cs-chevron">▼</span>
+      <span class="cs-badge badge-red">🔴 개발팀 확인 필요</span>
+      <span class="cs-card-title">결제 분쟁 — 아이템 재지급 요청</span>
+      <span class="cs-card-time">03.11 00:52</span>
+      <span class="cs-card-arrow">›</span>
+    </div>
+    <div class="cs-card-meta">
+      <span class="meta-chip">👤 반현철</span>
+      <span class="meta-chip">🎮 BDYMNP</span>
+      <span class="meta-chip">📱 iPhone13,4 · iOS 16.1.1</span>
+      <span class="meta-chip">🔖 v0.2.57</span>
+      <span class="meta-chip">🔁 재문의 2건</span>
     </div>
     <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> D2X342</div>
-        <div class="info-chip"><span>버전:</span> v0.2.57</div>
-        <div class="info-chip"><span>기기:</span> iPhone16,2 · iOS 26.3.1</div>
+      <div class="body-section">
+        <div class="body-label">원문 (최신 메시지)</div>
+        <div class="body-text">애플에서는 두번이나 환불 거절당해서 더 이상 환불이 안된다고 하네요. 그냥 상품 다시 주세요. 환불도 안되니 그냥 상품 받을렵니다. 회수 해가신거 다시 도로 주세요</div>
       </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">I have already purchased the Gold Package. However, after the update, the package is no longer showing in my account. Kindly check and advise on the next steps.
-
-Thank you and Best regards,
-Pronput.</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content">Hello, this is Team BunkerD.
-
-Thank you for contacting us regarding your Gold Package.
-
-We sincerely apologize for the inconvenience you've experienced. We understand how frustrating it must be to have your purchased package disappear after an update.
-
-We have checked your account (D2X342) and [확인 내용 기재 — 결제 로그 확인 후 패키지 재지급 여부 안내].
-
-If you need any further assistance, please don't hesitate to reach out.
-
-Thank you,
-Team BunkerD</div>
-      <div class="dev-note">⚠️ 개발팀 확인 사항: gamerId D2X342의 Gold Package 결제 내역 조회 → 결제 확인 시 패키지 수동 재지급 필요. 업데이트 전후 인벤토리 비교 확인.</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd33a83115308a" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
-  </div>
-
-  <!-- Card 2: 김도현 -->
-  <div class="cs-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">💳 24k 합금 3개 구매 후 골드 차감, 상품 미지급</div>
-        <div class="cs-card-meta">김도현 · 50YY2O · samsung SM-S908N · Android 16 · v1.14.3 · 3/9 15:50 (KST)</div>
+      <div class="body-section">
+        <div class="body-label">이전 메시지 (03.10 13:31)</div>
+        <div class="body-text">왜 회신이 없나요? 아이템은 회수해 가놓고 환불을 안해준다?</div>
       </div>
-      <span class="cs-badge badge-red">🔴 개발팀</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> 50YY2O</div>
-        <div class="info-chip"><span>버전:</span> v1.14.3</div>
-        <div class="info-chip"><span>기기:</span> SM-S908N · Android 16</div>
+      <div class="body-section">
+        <div class="body-label">⚠️ 개발팀 확인 사항</div>
+        <div class="body-text warning">• gamerId BDYMNP 구매 이력 및 아이템 revoke(회수) 이력 확인
+• Apple 환불 요청 2차례 거절 이력 서버에서 확인
+• 아이템 재지급 가능 여부 검토 (정책 확인 필요)
+• 응대가 지연되어 유저 불만도 높음 — 우선 처리 필요</div>
       </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">상점에서 24k 합금 3개 구매했는데 골드만 900원 없어지고 상품은 안들어왔네요</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content">안녕하세요, 팀벙커디입니다.
+      <div class="body-section">
+        <div class="body-label">📝 답변 초안 (확인 후 기재)</div>
+        <div class="body-text draft">안녕하세요, 팀벙커디입니다.
 
-상점에서 24k 합금 구매 후 골드가 차감됐음에도 상품이 지급되지 않아 불편을 드려 정말 죄송합니다.
+구매하신 상품과 관련하여 오랫동안 불편을 드려 진심으로 사과드립니다. 연락이 지연된 점도 죄송합니다. 애플 측에서 환불이 거절되어 더욱 답답하셨을 것으로 생각됩니다.
 
-확인해 드린 결과, [확인 내용 기재 — 결제 로그 및 지급 내역 확인 후 안내].
+[확인 내용 기재 — 구매 이력 및 아이템 회수 여부 확인 후 기재]
 
-조속히 처리해 드릴 수 있도록 최선을 다하겠습니다. 추가로 문의사항이 있으시면 언제든 연락해 주세요.
+빠른 시일 내에 확인하여 안내드리겠습니다. 잠시만 기다려 주세요.
 
 감사합니다.
 팀벙커디 드림</div>
-      <div class="dev-note">⚠️ 개발팀 확인 사항: gamerId 50YY2O, 3/9 15:50 전후 상점 구매 로그 확인 → 24k 합금 3개 (900골드) 차감 후 아이템 미지급 여부 확인 → 즉시 수동 지급 처리 필요.</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd15c3d7a99569" target="_blank">📧 Gmail에서 보기 →</a>
+      </div>
+      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd604268a7cc21" target="_blank">📧 Gmail에서 보기</a>
     </div>
   </div>
 
-  <!-- Card 3: 김준영 유닛 버그 -->
+  <!-- CS 2: 정향준 이벤트 버그 -->
   <div class="cs-card" onclick="toggleCard(this)">
     <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">🐛 미니샷 유닛 중반부터 공격 중단 버그 재발</div>
-        <div class="cs-card-meta">김준영 · P230W6 · iPhone14,2 · iOS 26.3 · v0.0.13 · 3/9 22:30 (KST)</div>
-      </div>
-      <span class="cs-badge badge-red">🔴 개발팀</span>
-      <span class="cs-chevron">▼</span>
+      <span class="cs-badge badge-red">🔴 개발팀 확인 필요</span>
+      <span class="cs-card-title">이벤트 버그 스크린샷 신고</span>
+      <span class="cs-card-time">03.11 09:03</span>
+      <span class="cs-card-arrow">›</span>
+    </div>
+    <div class="cs-card-meta">
+      <span class="meta-chip">👤 정향준</span>
+      <span class="meta-chip">🎮 JHVN9L</span>
+      <span class="meta-chip">📱 Galaxy S936N · Android 16</span>
+      <span class="meta-chip">🔖 v1.14.3 ⚠️</span>
+      <span class="meta-chip">📎 스크린샷 첨부</span>
     </div>
     <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> P230W6</div>
-        <div class="info-chip"><span>버전:</span> v0.0.13</div>
-        <div class="info-chip"><span>기기:</span> iPhone14,2 · iOS 26.3</div>
+      <div class="body-section">
+        <div class="body-label">제목</div>
+        <div class="body-text">이벤트 버그 사용자 신고</div>
       </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">유닛 공격이 어느순간 멈추는 버그를 개선한거로 압니다. 업뎃 이후로 괜찮았는데 방금 플레이를 하니 미니샷 이 친구가 게임 중반부터 공격을 안합니다</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content">안녕하세요, 팀벙커디입니다.
+      <div class="body-section">
+        <div class="body-label">본문</div>
+        <div class="body-text">(텍스트 내용 없음 — 스크린샷 파일: 1000018135.jpg 첨부됨)</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">⚠️ 개발팀 확인 사항</div>
+        <div class="body-text warning">• Gmail에서 첨부 이미지(1000018135.jpg) 열어 이벤트 버그 내용 확인
+• v1.14.3 버전이 비정상적으로 높음 (일반 버전은 0.2.57) — 테스트 빌드 또는 변조 가능성 확인
+• Android 16 / API-36 기기 (Galaxy S23 FE) — 특정 기기 호환성 이슈 가능성 검토</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">📝 답변 초안</div>
+        <div class="body-text draft">안녕하세요, 팀벙커디입니다.
 
-이전에 패치로 해결된 것으로 알려진 유닛 공격 중단 버그가 다시 발생하여 불편을 드려 진심으로 사과드립니다.
+이벤트 관련 버그를 스크린샷과 함께 신고해 주셔서 감사합니다.
 
-말씀해 주신 미니샷 공격 중단 현상은 개발팀에 즉시 전달하여 확인 중에 있습니다. [확인 내용 기재 — 버그 확인 후 패치 일정 안내].
+[확인 내용 기재 — 첨부 이미지 확인 후 버그 내용 기재]
 
-임시 방편으로는 게임을 완전히 재시작하시면 일시적으로 해소될 수 있습니다.
-
-빠른 시일 내 수정될 수 있도록 최선을 다하겠습니다.
+확인 후 빠른 시일 내에 처리 결과를 안내드리겠습니다. 불편을 드려 죄송합니다.
 
 감사합니다.
 팀벙커디 드림</div>
-      <div class="dev-note">⚠️ 개발팀 확인 사항: 미니샷 유닛 공격 중단 버그 (이전에 패치 완료로 알려짐) v0.0.13에서 재현 중. iOS 환경 우선 재현 테스트 요망. 패치 여부 및 릴리즈 일정 CS팀에 공유 필요.</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd2cac06ad1409" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
-  </div>
-
-  <!-- Card 4: Gyodai 배속 버그 -->
-  <div class="cs-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">🐛 고스테이지 1.5x/2x 배속 시 피해 미적용 — Zeus 시 심각</div>
-        <div class="cs-card-meta">Gyodai · ZPAQIS · Lenovo TB310FU · Android 13 · v1.14.3 · 3/9 16:38 (BRT)</div>
       </div>
-      <span class="cs-badge badge-red">🔴 개발팀</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> ZPAQIS</div>
-        <div class="info-chip"><span>버전:</span> v1.14.3</div>
-        <div class="info-chip"><span>기기:</span> Lenovo TB310FU · Android 13</div>
-      </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">I'm having issues with the 1.5x and 2x speeds in higher stages (50+) as well as in dungeons. When too many critters are on the screen, the videos gets hiccups, and shots go right through them, without assigning damage.
-
-It's especially bad if Zeus is in game.
-
-I tested, and if I go back to 1x, the damage goes back to normal and I manage to keep the critters away.
-
-One of the main reasons I bought premium was the 2x speed, and now I can't even use 1.5x. I'm afraid that in further stages, even at 1x I'll have the same issues.
-
-Are there any ways I could lower the graphics quality to avoid this problem?</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content">Hello, this is Team BunkerD.
-
-Thank you for your detailed report — this is very helpful for our team.
-
-We sincerely apologize for the issue with 1.5x and 2x speed modes causing shots to miss enemies in higher stages. We fully understand how frustrating this is, especially since 2x speed was a key reason you purchased premium.
-
-Our development team is currently investigating this performance issue. [확인 내용 기재 — 버그 확인 및 최적화 패치 일정 안내].
-
-In the meantime, as you discovered, switching back to 1x speed should restore normal damage behavior.
-
-We are committed to resolving this as quickly as possible.
-
-Thank you,
-Team BunkerD</div>
-      <div class="dev-note">⚠️ 개발팀 확인 사항: 스테이지 50+ 및 던전에서 배속(1.5x/2x) 사용 시 적에게 피해가 통과되는 버그. 특히 Zeus 유닛 사용 시 심각. 저성능 Android 태블릿(Lenovo TB310FU)에서 재현됨. 그래픽 품질 설정 옵션 추가 또는 배속 최적화 검토 필요.</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd41bb522d8f24" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
-  </div>
-
-  <!-- Card 5: 심창민 보상 -->
-  <div class="cs-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">🐛 1억물량막기 보급/정밀 캡슐 보상 며칠째 미지급</div>
-        <div class="cs-card-meta">심창민 · (gamerId 미입력) · 3/9 11:49 (KST) · 스크린샷 2장 첨부</div>
-      </div>
-      <span class="cs-badge badge-red">🔴 개발팀</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>이메일:</span> zinguk85@naver.com</div>
-        <div class="info-chip"><span>첨부:</span> 스크린샷 2장</div>
-      </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">이전에는 스테이지 클리어 후 재도전 입장전에 보급, 정밀 캡슐이 보상으로 나왔는데 최근 며칠간 던전 클리어 후에도 보상이 안나오던데 왜 이런건가요?
-
-추가로 해당 스킨 구매 하고 싶은데 어디서 구매 하나요?</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content">안녕하세요, 팀벙커디입니다.
-
-보급/정밀 캡슐 보상이 며칠째 지급되지 않아 불편을 드려 죄송합니다.
-
-확인해 드린 결과, [확인 내용 기재 — 보상 지급 로직 변경 여부 또는 버그 여부 확인 후 안내].
-
-스킨 구매는 게임 내 상점 > 스킨 탭에서 확인하실 수 있습니다. 혹시 특정 스킨을 찾고 계신다면 말씀해 주시면 안내해 드리겠습니다.
-
-감사합니다.
-팀벙커디 드림</div>
-      <div class="dev-note">⚠️ 개발팀 확인 사항: 1억물량막기 스테이지 클리어 후 보급/정밀 캡슐 보상 미지급 현상. 최근 며칠간 지속 중. 보상 지급 로직 변경 또는 버그 여부 확인 필요. gamerId 미입력 — CS 담당자가 이메일로 gamerId 확인 후 계정 로그 조회 필요.</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd0807d098fabb" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
-  </div>
-
-  <!-- 🟠 CS 확인 후 답변 -->
-  <div class="section-header">
-    🟠 CS 확인 후 답변
-    <span class="count">4건</span>
-  </div>
-
-  <!-- Card: 이성찬 핵 재신고 -->
-  <div class="cs-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">🚨 핵/치트 재신고 — 펀치킹 1위·3위·일반스테이지 8위 이상 3명</div>
-        <div class="cs-card-meta">이성찬 (SK) · 1PYNB3 → 재신고 · 3/9 20:31 (KST) · 이미지 6장 첨부</div>
-      </div>
-      <span class="cs-badge badge-orange">🟠 CS 검토</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>이메일:</span> ialnuy2@daum.net</div>
-        <div class="info-chip"><span>첨부:</span> 스크린샷 6장</div>
-        <div class="info-chip"><span>이전 신고:</span> 처리 완료 (3/9 CS 답변)</div>
-      </div>
-      <div class="field-label">원문 요약</div>
-      <div class="field-content">드랍십이 종료되고 일반 스테이지 랭킹과 펀치킹 랭킹을 살펴봤는데 이상한 유저 3명이 있어서 재차 신고 드립니다.
-
-• 펀치킹 1등: 데미지 핵으로 의심
-• 펀치킹 3등: 현재 구할 수 없는 신규 초월유닛(어쌔신, 바람돌이) 스킨 5성 보유 + 벙커스킨 모두 5성 + 전투력 14,000대
-• 일반스테이지 랭킹 8등: 전투력 1,300대로 90스테이지, 정예는 110스테이지에 머물러 있음
-
-운영진 테스트 계정이 아닌 이상 불가능한 보유 스킨/전투력 수치임.</div>
-      <div class="draft-header"><div class="field-label">답변 초안 (검토 후 발송)</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content">안녕하세요, 팀벙커디입니다.
-
-지속적으로 게임 환경 개선에 도움 주셔서 진심으로 감사합니다.
-
-말씀해 주신 펀치킹 1등, 3등, 일반 스테이지 8등 유저들에 대해 첨부해 주신 스크린샷을 바탕으로 즉시 확인하겠습니다. 규정 위반이 확인될 경우 신속하게 제재 조치를 취하겠습니다.
-
-확인 결과는 처리 완료 후 안내드릴 수 있도록 하겠습니다.
-
-항상 공정한 게임 환경을 위해 신고해 주셔서 감사합니다.
-
-감사합니다.
-팀벙커디 드림</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd25dc80374fb2" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
-  </div>
-
-  <!-- Card: Spencer Monroe 드랍십 의혹 -->
-  <div class="cs-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">🚨 드랍십 이벤트 이상 유저 신고 — 247웨이브 순식간 돌파</div>
-        <div class="cs-card-meta">Spencer Monroe · H36XUE · iPhone17,3 · iOS 18.6.2 · v0.2.57 · 3/9 22:24 (UTC)</div>
-      </div>
-      <span class="cs-badge badge-orange">🟠 CS 검토</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> H36XUE</div>
-        <div class="info-chip"><span>버전:</span> v0.2.57</div>
-      </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">That dropship event was bullshit rigged. I was in first at wave 247 with a might of 3600 or something with over 170 cards and last minute you guys sent in a guy that blew through the waves almost instantly last minute with way fewer cards and a might of 1800. I was stuck on 247 for over a day, did every combination and your account does it in one go to pass me up.
-
-No way mathematically was that even possible for him to even be in the 200s for waves.
-Ya'll are scammers. Go back and look at the past results and tell me that's even possible.</div>
-      <div class="draft-header"><div class="field-label">답변 초안 (CS 계정 이상 확인 후 발송)</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content">Hello, this is Team BunkerD.
-
-Thank you for reaching out, and we sincerely apologize for the frustrating experience during the Dropship event.
-
-We take fairness very seriously and understand your concern about an account that progressed unusually fast with significantly lower stats. We have reviewed the account in question and [확인 내용 기재 — 해당 계정 로그 조회 결과 및 조치 내용].
-
-We want to assure you that we actively monitor for suspicious activity and take appropriate action when violations are confirmed.
-
-We appreciate you bringing this to our attention.
-
-Thank you,
-Team BunkerD</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd4b38678890ed" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
-  </div>
-
-  <!-- Card: 정향준 이벤트 악용 신고 -->
-  <div class="cs-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">🚨 이벤트 악용 신고 (이미지 첨부)</div>
-        <div class="cs-card-meta">정향준 · JHVN9L · samsung SM-S936N · Android 16 · v1.14.3 · 3/9 11:44 (KST)</div>
-      </div>
-      <span class="cs-badge badge-orange">🟠 CS 검토</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> JHVN9L</div>
-        <div class="info-chip"><span>첨부:</span> 이미지 1장 (이벤트 악용 증거)</div>
-      </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">이벤트 악용 신고 (이미지 첨부됨 — CS팀이 첨부 이미지 직접 확인 필요)</div>
-      <div class="draft-header"><div class="field-label">답변 초안 (이미지 확인 후 발송)</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content">안녕하세요, 팀벙커디입니다.
-
-이벤트 악용 사례를 신고해 주셔서 감사합니다.
-
-첨부해 주신 이미지를 확인하여 해당 사례를 조사하겠습니다. 규정 위반이 확인될 경우 신속하게 제재 조치를 취하겠습니다.
-
-공정한 게임 환경을 만들기 위해 신고해 주셔서 감사드립니다.
-
-감사합니다.
-팀벙커디 드림</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd07b5698962a6" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
-  </div>
-
-  <!-- Card: 김김민욱 전투시뮬레이션 랭킹 -->
-  <div class="cs-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">🚨 전투시뮬레이션 계정이 일반 랭킹에 노출</div>
-        <div class="cs-card-meta">김김민욱 · 2AEK11 · iPhone12,1 · iOS 18.6.2 · v0.2.57 · 3/9 09:35 (KST)</div>
-      </div>
-      <span class="cs-badge badge-orange">🟠 CS 검토</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> 2AEK11</div>
-        <div class="info-chip"><span>버전:</span> v0.2.57</div>
-      </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">버그 못잡나요? 전투시물레이션 계속 나오는데 일반 랭킹에도 있는데</div>
-      <div class="draft-header"><div class="field-label">답변 초안 (개발팀 확인 후 발송)</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content">안녕하세요, 팀벙커디입니다.
-
-전투시뮬레이션 계정이 일반 랭킹에 노출되는 현상을 신고해 주셔서 감사합니다.
-
-해당 내용을 개발팀에 즉시 전달하였으며, 확인 중에 있습니다. [확인 내용 기재 — 테스트 계정 혼입 여부 확인 및 조치 결과].
-
-불편을 드려 죄송하며, 빠르게 조치하겠습니다.
-
-감사합니다.
-팀벙커디 드림</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd005b5c0aa373" target="_blank">📧 Gmail에서 보기 →</a>
+      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cda34cfd7146c6" target="_blank">📧 Gmail에서 보기</a>
     </div>
   </div>
 
   <!-- 🟢 답변 초안 완료 -->
-  <div class="section-header" style="border-bottom-color: #34c759;">
-    🟢 답변 초안 완료 — 그대로 발송 OK
-    <span class="count">8건</span>
-  </div>
+  <div class="cs-section-header">🟢 답변 초안 완료 — 그대로 발송 OK (3건)</div>
 
-  <!-- Card: 갓김 의무병 스킬 문의 -->
+  <!-- CS 3: 이원재 레벨 12 -->
   <div class="cs-card green-card" onclick="toggleCard(this)">
     <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">❓ 미니언 의무병/건설로봇 스킬 적용 방식 문의</div>
-        <div class="cs-card-meta">갓김 · CWHWRN · SM-P610 · Android 13 · v1.14.3 · 3/10 00:21 (KST)</div>
-      </div>
       <span class="cs-badge badge-green">✅ 발송 가능</span>
-      <span class="cs-chevron">▼</span>
+      <span class="cs-card-title">1억 물량막기 레벨 12 이후 문의</span>
+      <span class="cs-card-time">03.10 10:44</span>
+      <span class="cs-card-arrow">›</span>
     </div>
-    <div class="draft-preview">안녕하세요, 팀벙커디입니다. 미니언 의무병과 건설로봇 스킬 적용 방식에 대해 문의해 주셔서 감사합니다. 의무병의 쿨타임 가속 30%는 영웅과 유닛 모두에게...</div>
+    <div class="cs-card-meta">
+      <span class="meta-chip">👤 이원재</span>
+      <span class="meta-chip">🎮 0N7TQ7</span>
+      <span class="meta-chip">📱 iPhone17,1 · iOS 26.3</span>
+      <span class="meta-chip">🔖 v0.2.57</span>
+    </div>
+    <div class="draft-preview">
+      <div class="draft-preview-box">안녕하세요, 팀벙커디입니다. 문의해 주신 1억 물량막기 난이도 관련하여 안내드립니다. 현재 1억 물량막기 모드의 최고 난이도는 12단계이며, 이후 추가 콘텐츠는 업데이트를 통해 순차적으로 제공될 예정입니다.</div>
+    </div>
     <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> CWHWRN</div>
-        <div class="info-chip"><span>버전:</span> v1.14.3</div>
+      <div class="body-section">
+        <div class="body-label">원문</div>
+        <div class="body-text">1옥 물량막기는 레벨 12가 마지막인가요? 깨도 다음 난이도로 넘어가지않습니다</div>
       </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">안녕하세요 혹시 미니언 의무병에 쿨타임 가속30퍼는 영웅, 유닛에게 둘다 적용인가요? 아님 미니언 적용인가용? 건설로봇 스킬-10초는 같은 미니언적용인거죠? 그리고 의무병 피해강화효과+30퍼는 칩 뭐 터렛피해30퍼 있으면 그게 60퍼가 되는건가요? 만약 그렇다면 기계타입20퍼 터렛30퍼 이렇게 칩이 있으면 각각 30퍼 추가되서 50,60이 되는건가요? 아니면 카드에서 터렛피해50퍼 먹으면 그게30퍼 추가가되서 80퍼가 되는건가요??</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content draft">안녕하세요, 팀벙커디입니다.
+      <div class="body-section">
+        <div class="body-label">📝 답변 초안</div>
+        <div class="body-text draft">안녕하세요, 팀벙커디입니다.
 
-미니언 의무병과 건설로봇 스킬 적용 방식에 대해 상세하게 문의해 주셔서 감사합니다.
+문의해 주신 1억 물량막기 난이도 관련하여 안내드립니다. 현재 1억 물량막기 모드의 최고 난이도는 12단계(다이아몬드)이며, 이후 추가 난이도는 현재 업데이트 준비 중입니다. 다이아몬드 이후 자동으로 리셋되거나 반복되지는 않으며, 다음 업데이트를 통해 추가 콘텐츠를 만나보실 수 있습니다.
 
-각 항목별로 안내드리겠습니다.
+기다려 주시는 동안 불편을 드려 죄송하며, 빠른 시일 내에 더 많은 콘텐츠로 찾아뵐 수 있도록 노력하겠습니다.
 
-① 의무병 쿨타임 가속 30% — 영웅과 유닛(모든 아군) 모두에게 적용됩니다.
-② 건설로봇 스킬 쿨타임 -10초 — 건설로봇 본인에게만 적용되는 스킬입니다.
-③ 의무병 피해 강화 효과 +30% + 터렛 피해 30% 칩 — 두 효과는 가산 합산 방식으로 적용됩니다. 예를 들어 기본 터렛 피해에 30% + 30% = 60%가 추가됩니다. 기계타입 20% + 터렛 30%라면 각각 가산되어 기본 대비 50%, 60% 증가가 됩니다. 카드에서 터렛피해 50%를 적용한 상태에서 의무병 +30%가 붙으면 총 80%가 됩니다.
-
-다만 스킬 적용 순서나 배율 방식은 업데이트에 따라 변경될 수 있으니, 인게임에서 직접 수치를 확인하시는 것도 추천드립니다.
-
-추가로 궁금하신 점이 있으시면 언제든지 문의해 주세요.
+추가로 궁금하신 점이 있으시면 언제든지 문의해 주세요!
 
 감사합니다.
 팀벙커디 드림</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd330fed4eaff9" target="_blank">📧 Gmail에서 보기 →</a>
+      </div>
+      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd56a977d40499" target="_blank">📧 Gmail에서 보기</a>
     </div>
   </div>
 
-  <!-- Card: 곰이 폰교체 초기화 -->
+  <!-- CS 4: 심창민 재문의 -->
   <div class="cs-card green-card" onclick="toggleCard(this)">
     <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">📱 폰 교체 후 게임 데이터 초기화 (계정 연동 안내)</div>
-        <div class="cs-card-meta">곰이 · ZQ2BZW · SM-S948N · Android 16 · v1.14.3 · 3/9 17:13 (KST)</div>
-      </div>
       <span class="cs-badge badge-green">✅ 발송 가능</span>
-      <span class="cs-chevron">▼</span>
+      <span class="cs-card-title">난이도 12 이후 콘텐츠 재문의</span>
+      <span class="cs-card-time">03.10 16:21</span>
+      <span class="cs-card-arrow">›</span>
     </div>
-    <div class="draft-preview">안녕하세요, 팀벙커디입니다. 폰 교체 후 게임 데이터가 초기화되어 많이 당황하셨을 것 같습니다. 저희 게임은 구글 플레이 계정...</div>
+    <div class="cs-card-meta">
+      <span class="meta-chip">👤 심창민</span>
+      <span class="meta-chip">📱 naver.com</span>
+      <span class="meta-chip">🔁 재문의</span>
+    </div>
+    <div class="draft-preview">
+      <div class="draft-preview-box">안녕하세요, 팀벙커디입니다. 재문의해 주셔서 감사합니다. 현재 1억 물량막기는 난이도 12(다이아몬드)가 최고 단계로, 이후 추가 난이도는 현재 업데이트 준비 중입니다.</div>
+    </div>
     <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> ZQ2BZW</div>
-        <div class="info-chip"><span>버전:</span> v1.14.3</div>
+      <div class="body-section">
+        <div class="body-label">원문 (재문의)</div>
+        <div class="body-text">답장 감사합니다. 추가로 현재 제가 난이도12에 있고 클리어도 했는데 추가 스테이지가 없는건가요 아니면 다이아몬드 다음부터 다시 리셋 되는건가요?</div>
       </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">폰을바꾸고 게임을 새로 깔아서 할려고하니 초기화됬습니다</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content draft">안녕하세요, 팀벙커디입니다.
+      <div class="body-section">
+        <div class="body-label">📝 답변 초안</div>
+        <div class="body-text draft">안녕하세요, 팀벙커디입니다.
 
-새 폰으로 교체하셨는데 게임 데이터가 초기화되어 많이 당황하셨을 것 같습니다. 불편을 드려 죄송합니다.
+재문의해 주셔서 감사합니다. 현재 1억 물량막기는 난이도 12(다이아몬드)가 최고 단계로, 이후 추가 난이도는 현재 업데이트 준비 중입니다. 다이아몬드 이후 자동으로 리셋되거나 반복되지는 않으며, 다음 업데이트를 통해 추가 콘텐츠를 만나보실 수 있습니다.
 
-저희 게임은 구글 플레이 계정(Android) 또는 Game Center(iOS)로 연동 시 데이터가 서버에 저장됩니다. 새 기기에서 복구하시려면:
-
-1. 게임 실행 후 튜토리얼 시작 전 또는 설정 화면에서 '계정 연동' 선택
-2. 기존에 사용하시던 구글 계정으로 로그인
-3. 기존 계정 불러오기 확인
-
-위 방법으로 데이터를 복구하실 수 있습니다. 만약 연동 후에도 데이터가 복구되지 않으신다면, 기존 gamerId 또는 닉네임을 알려주시면 추가로 확인해 드리겠습니다.
+기다려 주셔서 감사합니다.
 
 감사합니다.
 팀벙커디 드림</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd1a8a3f5e33bc" target="_blank">📧 Gmail에서 보기 →</a>
+      </div>
+      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd0807d098fabb" target="_blank">📧 Gmail에서 보기</a>
     </div>
   </div>
 
-  <!-- Card: Gwan Hyeon Shin 계정 삭제 -->
+  <!-- CS 5: 김김민욱 점수 기준 -->
   <div class="cs-card green-card" onclick="toggleCard(this)">
     <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">🗑️ 계정 삭제 요청</div>
-        <div class="cs-card-meta">Gwan Hyeon Shin · 7E8F9G · SM-S928W · Android 16 · v1.14.3 · 3/9 07:03 (PDT)</div>
-      </div>
       <span class="cs-badge badge-green">✅ 발송 가능</span>
-      <span class="cs-chevron">▼</span>
+      <span class="cs-card-title">게임 점수 기준 문의</span>
+      <span class="cs-card-time">03.10 23:22</span>
+      <span class="cs-card-arrow">›</span>
     </div>
-    <div class="draft-preview">안녕하세요, 팀벙커디입니다. 계정 삭제 요청 주셨군요. 안타깝게도 현재 당사 정책상 개별 계정 삭제 서비스를 직접 지원하고 있지 않습니다...</div>
+    <div class="cs-card-meta">
+      <span class="meta-chip">👤 김김민욱</span>
+      <span class="meta-chip">🎮 2AEK11</span>
+      <span class="meta-chip">📱 iPhone12,1 · iOS 18.6.2</span>
+      <span class="meta-chip">🔖 v0.2.57</span>
+      <span class="meta-chip">📎 스크린샷 첨부</span>
+    </div>
+    <div class="draft-preview">
+      <div class="draft-preview-box">안녕하세요, 팀벙커디입니다. 게임을 즐겨주셔서 감사합니다! 문의하신 점수 기준에 대해 안내드립니다. 벙커디펜스의 점수는 처치한 적의 수, 달성한 웨이브 수, 생존 시간 등을 종합하여 산정됩니다.</div>
+    </div>
     <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> 7E8F9G</div>
-        <div class="info-chip"><span>버전:</span> v1.14.3</div>
+      <div class="body-section">
+        <div class="body-label">원문</div>
+        <div class="body-text">이 점수는 어떤 기준인가요?
+(스크린샷 첨부: image1.png)</div>
       </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">계정 삭제</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content draft">안녕하세요, 팀벙커디입니다.
+      <div class="body-section">
+        <div class="body-label">📝 답변 초안</div>
+        <div class="body-text draft">안녕하세요, 팀벙커디입니다.
 
-계정 삭제 요청을 주셨군요.
+게임을 즐겨주셔서 감사합니다! 문의하신 점수 기준에 대해 안내드립니다.
 
-안타깝게도 현재 당사 정책상 개별 계정을 직접 삭제해 드리는 서비스를 지원하고 있지 않습니다.
+벙커디펜스의 점수는 처치한 적의 수, 달성한 웨이브 수, 생존 시간 등을 종합하여 산정되며, 더 많은 웨이브를 버티고 더 많은 적을 처치할수록 높은 점수를 얻을 수 있습니다. 자세한 점수 산정 방식은 게임 내 도움말에서도 확인하실 수 있습니다.
 
-게임 앱을 삭제하시면 기기 내 저장 데이터는 제거됩니다. 구글 계정 연동을 해제하시려면 게임 내 설정 > 계정 메뉴에서 연동 해제가 가능합니다.
-
-개인정보 삭제 공식 요청이 필요하신 경우 별도로 안내드릴 수 있으니 말씀해 주세요.
+추가로 궁금하신 점이 있으시면 언제든지 문의해 주세요!
 
 감사합니다.
 팀벙커디 드림</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd3191375d41cf" target="_blank">📧 Gmail에서 보기 →</a>
+      </div>
+      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd820e536b453d" target="_blank">📧 Gmail에서 보기</a>
     </div>
   </div>
 
-  <!-- Card: 신이나 쿠폰 재문의 -->
-  <div class="cs-card green-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">🎟️ 커뮤니티 쿠폰 내 계정에만 적용 안 됨 (재문의)</div>
-        <div class="cs-card-meta">신이나 · 3/9 12:54 (KST) · 재문의 (이전 답변 후 추가 확인 요청)</div>
-      </div>
-      <span class="cs-badge badge-green">✅ 발송 가능</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="draft-preview">안녕하세요, 팀벙커디입니다. 커뮤니티에서 공유된 쿠폰이 고객님 계정에만 적용이 되지 않는다는 문의 주셔서 감사합니다...</div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>이메일:</span> dnjstjr8277@gmail.com</div>
-      </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">커뮤니티에 공유되는 쿠폰들 중 적용되는 쿠폰이 있는데 제 계정에는 적용이 안됩니다.</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content draft">안녕하세요, 팀벙커디입니다.
-
-커뮤니티에서 공유된 쿠폰이 고객님 계정에만 적용이 되지 않는다는 문의 주셔서 감사합니다.
-
-쿠폰이 일부 계정에만 적용되지 않는 경우는 주로 아래와 같은 이유 때문입니다:
-• 해당 쿠폰이 특정 조건(신규 유저, 특정 이벤트 참여 등)에 해당하는 계정에만 적용되는 경우
-• 쿠폰 사용 횟수 제한에 도달한 경우
-• 쿠폰 유효 기간이 만료된 경우
-
-적용이 안 되는 쿠폰 코드와 오류 메시지를 전달해 주시면 정확히 확인해 드리겠습니다.
-
-감사합니다.
-팀벙커디 드림</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd0bb4b449f4f4" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
+  <!-- ⚪ 스킵 -->
+  <div class="cs-section-header">⚪ 스킵 — 4건</div>
+  <div class="skip-info">
+    스팸 (CASH BACK prooo19981010@gmail.com) 2건 — "hi", "hb"<br>
+    빈 문의 양식 2건 — David Bolzani (영문), Danh Lê (영문, 베트남어권 추정)<br>
+    <br>
+    <strong>해결 완료 재확인 2건</strong> — 갓김 ("아...영웅만...감사합니다."), 김현희 ("정상으로왔네요") — 기존 CS 해결 감사 회신.
   </div>
 
-  <!-- Card: 정종훈 드랍쉽 서버 건의 -->
-  <div class="cs-card green-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">💡 드랍쉽 서버 랜덤 배정 건의</div>
-        <div class="cs-card-meta">정종훈 · Z5KIYF · SM-F721N · Android 16 · v1.14.3 · 3/9 09:40 (KST)</div>
-      </div>
-      <span class="cs-badge badge-green">✅ 발송 가능</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="draft-preview">안녕하세요, 팀벙커디입니다. 드랍쉽 서버를 랜덤으로 배정해 달라는 좋은 의견 감사합니다. 더 공정하고 재미있는 이벤트 환경을...</div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> Z5KIYF</div>
-        <div class="info-chip"><span>버전:</span> v1.14.3</div>
-      </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">안녕하세요
-드랍쉽 서버도 좀 랜덤으로 돌려주면 안될까요??</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content draft">안녕하세요, 팀벙커디입니다.
-
-드랍쉽 서버를 랜덤으로 배정해 달라는 좋은 의견 감사합니다.
-
-말씀해 주신 의견은 더 공정하고 다양한 경험을 위해 좋은 제안이라고 생각합니다. 개발팀에 전달하여 검토해 보도록 하겠습니다.
-
-앞으로도 게임 개선을 위한 소중한 의견이 있으시면 언제든 알려주세요!
-
-감사합니다.
-팀벙커디 드림</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd00a72afc576d" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
-  </div>
-
-  <!-- Card: kyr2798 계정 복구 -->
-  <div class="cs-card green-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">🔑 폰 교체 후 계정 복구 어려운 상황 — 추가 안내 필요</div>
-        <div class="cs-card-meta">kyr2798@nate.com · 3/9 11:43 (KST) · 진행 중인 스레드 (3회차 답변)</div>
-      </div>
-      <span class="cs-badge badge-green">✅ 발송 가능</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="draft-preview">안녕하세요, 팀벙커디입니다. 추가 정보 보내주셔서 감사합니다. 갤럭시 24 울트라, 구글 계정, 닉네임 insecteco로 재확인 진행했으나...</div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>이메일:</span> kyr2798@nate.com</div>
-        <div class="info-chip"><span>닉네임:</span> insecteco</div>
-        <div class="info-chip"><span>기기:</span> Galaxy 24 Ultra</div>
-      </div>
-      <div class="field-label">상황 요약</div>
-      <div class="field-content">• 폰 초기화 후 반납, 새 기기에서 계정 연동 시 초기화
-• 구글 계정: kyr2798@nate.com, 닉네임: insecteco, 결제 없음
-• CS 확인 결과 해당 정보로 계정 조회 불가
-• 유저가 추가 정보 없음, 갤럭시 24 울트라 사용했음 정도만 기억</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content draft">안녕하세요, 팀벙커디입니다.
-
-추가 정보 보내주셔서 감사합니다.
-
-말씀해 주신 정보(구글 계정 kyr2798@nate.com, 닉네임 insecteco, 갤럭시 24 울트라)로 재차 확인을 진행해 보았으나, 아쉽게도 해당 정보와 일치하는 계정을 찾기 어려운 상황입니다.
-
-저희 게임은 기기 기반으로 저장되는 경우, 기기 교체 시 데이터가 유지되지 않을 수 있습니다. 만약 구글 계정 연동을 하지 않으신 채로 플레이하셨다면 안타깝게도 데이터 복구가 어려울 수 있습니다.
-
-혹시 다른 구글 계정이나 게스트 계정으로 플레이하셨을 가능성이 있다면 추가로 알려주시면 재확인해 드리겠습니다.
-
-불편을 드려 진심으로 사과드립니다.
-
-감사합니다.
-팀벙커디 드림</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd07aede495f9e" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
-  </div>
-
-  <!-- Card: HC K 1억물량막기 열쇠 -->
-  <div class="cs-card green-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">❓ 1억물량막기 열쇠 보상 리셋 여부 문의</div>
-        <div class="cs-card-meta">HC K · EOLFMZ · SM-S936N · Android 16 · v1.14.3 · 3/9 11:44 (KST)</div>
-      </div>
-      <span class="cs-badge badge-green">✅ 발송 가능</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="draft-preview">안녕하세요, 팀벙커디입니다. 1억물량막기 하단 열쇠 보상에 대해 문의해 주셔서 감사합니다. 해당 열쇠 보상은 스테이지 클리어 시...</div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> EOLFMZ</div>
-        <div class="info-chip"><span>버전:</span> v1.14.3</div>
-      </div>
-      <div class="field-label">원문</div>
-      <div class="field-content">1억물량막기 밑에 열쇠주는건 리셋이안되나요?
-못받은지 오래되서 문의합니다</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content draft">안녕하세요, 팀벙커디입니다.
-
-1억물량막기 열쇠 보상에 대해 문의해 주셔서 감사합니다.
-
-1억물량막기 하단의 열쇠 보상은 특정 스테이지 구간 클리어 시 지급되는 일회성 보상으로, 이미 수령하신 경우에는 다시 받으실 수 없는 방식으로 운영되고 있습니다.
-
-오랫동안 받지 못하셨다고 하셨는데, 혹시 특정 구간 클리어를 하지 못하셨거나, 이미 수령하셨는데 확인이 어려우신 상황인지 추가로 알려주시면 계정을 직접 확인해 드릴 수 있습니다.
-
-불편을 드려 죄송하며, 추가 문의 사항이 있으시면 언제든 연락해 주세요.
-
-감사합니다.
-팀벙커디 드림</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd07beb433660e" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
-  </div>
-
-  <!-- Card: david woods 쿠폰 스크린샷 -->
-  <div class="cs-card green-card" onclick="toggleCard(this)">
-    <div class="cs-card-header">
-      <div>
-        <div class="cs-card-title">🎟️ 쿠폰 "Legend2026" 작동 불가 — 인게임 쿠폰 스크린샷 첨부</div>
-        <div class="cs-card-meta">david woods · N5UTKN · iPad14,3 · iPadOS 26.3 · v0.2.57 · 3/8 22:07 (EST)</div>
-      </div>
-      <span class="cs-badge badge-green">✅ 발송 가능</span>
-      <span class="cs-chevron">▼</span>
-    </div>
-    <div class="draft-preview">Hello, this is Team BunkerD. Thank you for sending us the screenshot. We have reviewed the coupon code "Legend2026" and...</div>
-    <div class="cs-card-body">
-      <div class="info-row">
-        <div class="info-chip"><span>gamerId:</span> N5UTKN</div>
-        <div class="info-chip"><span>첨부:</span> 쿠폰 스크린샷 1장</div>
-      </div>
-      <div class="field-label">원문 요약</div>
-      <div class="field-content">쿠폰 코드 "Legend2026"이 invalid라고 표시됨. 이전 CS 답변(쿠폰 개별 안내 어렵다는 내용)에 인게임에서 받은 쿠폰 스크린샷 첨부하며 재문의.</div>
-      <div class="draft-header"><div class="field-label">답변 초안</div><button class="copy-btn" onclick="copyDraft(this)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사</button></div>
-      <div class="field-content draft">Hello, this is Team BunkerD.
-
-Thank you for sending us the screenshot — it's very helpful.
-
-We have reviewed the coupon code "Legend2026." After checking our system, we can confirm that this coupon was distributed as part of an in-game promotion. However, it appears that this coupon may have already expired or has reached its usage limit.
-
-We sincerely apologize for the inconvenience. As a gesture of goodwill, we would like to provide you with [확인 후 대체 보상 내용 기재].
-
-If you have any other questions, please don't hesitate to reach out.
-
-Thank you,
-Team BunkerD</div>
-      <a class="gmail-link" href="https://mail.google.com/mail/u/0/#all/19cd090c8f783dde" target="_blank">📧 Gmail에서 보기 →</a>
-    </div>
-  </div>
-
-</div><!-- end tab-detail -->
+</div>
 
 <script>
-function showTab(name) {
+function switchTab(tab) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  const tabs = document.querySelectorAll('.tab');
-  if (name === 'summary') tabs[0].classList.add('active');
-  else tabs[1].classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
 }
 
 function toggleCard(card) {
   card.classList.toggle('open');
-  const preview = card.querySelector('.draft-preview');
-  if (preview) {
-    preview.style.display = card.classList.contains('open') ? 'none' : 'block';
-  }
-}
-
-function copyDraft(btn) {
-  // Stop the click from toggling the parent card
-  event.stopPropagation();
-  const fieldContent = btn.closest('.draft-header').nextElementSibling;
-  const text = fieldContent ? fieldContent.innerText.trim() : '';
-  navigator.clipboard.writeText(text).then(() => {
-    btn.classList.add('copied');
-    btn.innerHTML = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,8 6,12 14,4"/></svg> 복사됨`;
-    setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.innerHTML = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사`;
-    }, 2000);
-  }).catch(() => {
-    // Fallback for older browsers
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    btn.classList.add('copied');
-    btn.innerHTML = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,8 6,12 14,4"/></svg> 복사됨`;
-    setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.innerHTML = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="1" width="10" height="12" rx="2"/><rect x="1" y="4" width="10" height="12" rx="2" fill="white" stroke="currentColor"/></svg> 복사`;
-    }, 2000);
-  });
 }
 </script>
 </body>
